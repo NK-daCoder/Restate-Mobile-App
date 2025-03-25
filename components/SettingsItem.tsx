@@ -9,16 +9,18 @@ interface SettingsItemProp {
     title: string;
     onPress?: () => void;
     showArrow?: boolean;
+    ImageColor: string;
+    textColor: string;
 }
 
-const SettingsItem = ({ title, onPress, icon, showArrow=true }:SettingsItemProp) => {
+const SettingsItem = ({ title, onPress, icon, imageColor, textColor, showArrow=true } : SettingsItemProp) => {
   return (
     <TouchableOpacity onPress={onPress} style={ [utilityStyles.flexRow, utilityStyles.alignItemCenter, utilityStyles.justifyBetween, utilityStyles.mt2, utilityStyles.p2] }>
         <View style={ [utilityStyles.flexRow, utilityStyles.gap3, utilityStyles.alignItemCenter] }>
-            <Image source={icon} resizeMode="contain" style={[ utilityStyles.size_3 ]}/>
-            <Text style={ fontFamily.fontRubikRegular }>{title}</Text>
+            <Image source={icon} resizeMode="contain" tintColor={ imageColor } style={[ utilityStyles.size_3 ]}/>
+            <Text style={ [fontFamily.fontRubikRegular, textColor] }>{title}</Text>
         </View>
-        { showArrow && <Image source={icons.rightArrow} resizeMode="contain" style={ utilityStyles.size_2 }/> }
+        { showArrow && <Image source={icons.rightArrow} resizeMode="contain" tintColor={ imageColor } style={ utilityStyles.size_2 }/> }
     </TouchableOpacity>
   )
 }

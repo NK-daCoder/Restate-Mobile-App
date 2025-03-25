@@ -100,6 +100,10 @@ export const settings = [
     title: "Invite Friends",
     icon: icons.people,
   },
+  {
+    title: "logout",
+    icon: icons.logout
+  }
   
 ];
 
