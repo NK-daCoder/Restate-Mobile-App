@@ -8,9 +8,11 @@ import SettingsItem from '@/components/SettingsItem'
 import { fontFamily, utilityStyles } from '@/constants/utilityStyles'
 import { useGlobalContext } from '@/lib/globalProvider'
 import { logout } from '@/lib/appwrite'
+import { useRouter } from 'expo-router'
 
 const profile = () => {
   const { user, refetch } = useGlobalContext();
+  const router = useRouter(); // Initialize the router
 
   const handleLogout = async () => {
     Alert.alert(
@@ -24,14 +26,18 @@ const profile = () => {
         {
           text: "Logout",
           style: "destructive",
-          
           onPress: async () => {
-            const result = await logout();
-            if (result) {
-              Alert.alert("Success", "Logged out successfully");
-              refetch();
-            } else {
-              Alert.alert("Error", "Failed to logout");
+            try {
+              const result = await logout();
+              if (result) {
+                Alert.alert("Success", "Logged out successfully");
+                refetch();
+                router.replace('/sign-in'); // allows us to navigate to different page
+              } else {
+                Alert.alert("Error", "Failed to logout");
+              }
+            } catch (error) {
+              Alert.alert("Error", "An unexpected error occurred");
             }
           }
         }
@@ -68,12 +74,12 @@ const profile = () => {
             </View>
             <TouchableOpacity onPress={() => Alert.alert("Profile Settings", "Coming Soon")}>
               <Image 
-                source={images.avatar} 
+                source={ user?.avatar ? { uri: user.avatar } : images.avatar} 
                 resizeMode='cover' 
                 style={{ 
                   width: 250, 
                   height: 250, 
-                  borderRadius: 100000 
+                  borderRadius: 100000,
                 }} 
               />
               <Image 
@@ -84,7 +90,8 @@ const profile = () => {
                   utilityStyles.absolute, 
                   utilityStyles.right5, 
                   utilityStyles.bottom0
-                ]} 
+                ]}
+                tintColor={ utilityStyles.textSky600.color }
               />
             </TouchableOpacity>
             <Text style={{ 

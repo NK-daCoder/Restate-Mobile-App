@@ -37,7 +37,7 @@ const SignIn = () => {
       
         <View style={ [utilityStyles.px3, utilityStyles.py3, utilityStyles.absolute, utilityStyles.bottomN40, utilityStyles.wFull, utilityStyles.flexCol, utilityStyles.justifyCenterXY ] }>
           <Text style={ [utilityStyles.textBase, utilityStyles.px3, fontFamily.fontRubikSemiBold, utilityStyles.textGray300, utilityStyles.uppercase] }>Welcome To Restate</Text>
-          <Text style={ [utilityStyles.textCenter, utilityStyles.textGray800, utilityStyles.textXl, fontFamily.fontRubikBold, utilityStyles.mb2, fontFamily.fontRubikMedium] }>One step closer to your {"\n"}<Text style={ utilityStyles.textSky300 }>Dream Home</Text></Text>
+          <Text style={ [utilityStyles.textCenter, utilityStyles.textGray800, utilityStyles.text2xl, fontFamily.fontRubikBold, utilityStyles.mb2, fontFamily.fontRubikMedium] }>One step closer to your {"\n"}<Text style={ utilityStyles.textSky300 }>Dream Home</Text></Text>
           <TouchableOpacity onPress={ handleLogIn } style={[utilityStyles.flexRow, utilityStyles.gap3, utilityStyles.mt4, utilityStyles.border, utilityStyles.roundedFull, utilityStyles.py3, utilityStyles.px4, utilityStyles.flexRow, utilityStyles.alignItemCenter]}>
             <Image source={icons.google} style={[utilityStyles.size_3]} resizeMode="contain"/>
             <Text style={ fontFamily.fontRubikRegular }>Continue With Google</Text>
