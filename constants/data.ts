@@ -38,6 +38,7 @@ export const cards = [
 
 export const featuredCards = [
   {
+    id: 1,
     title: "Featured 1",
     location: "Location 1",
     price: "$100",
@@ -46,6 +47,7 @@ export const featuredCards = [
     category: "house",
   },
   {
+    id: 2,
     title: "Featured 2",
     location: "Location 2",
     price: "$200",

@@ -19,6 +19,8 @@ const utilityStyles = StyleSheet.create({
   my2: { marginVertical: 8 },
   my3: { marginVertical: 12 },
   my4: { marginVertical: 16 },
+  my5: { marginVertical: 20 },
+  my6: { marginVertical: 24 },
 
   ml0: { marginLeft: 0 },
   ml1: { marginLeft: 4 },
@@ -541,6 +543,9 @@ const utilityStyles = StyleSheet.create({
   underline: { textDecorationLine: 'underline' },
   lineThrough: { textDecorationLine: 'line-through' },
   noUnderline: { textDecorationLine: 'none' },
+
+  // Base Color Utilities
+  textWhite: {color: '#e6e6e6'},
 
   // Orange Color Utilities
   textOrange50: { color: '#fff7ed' },
