@@ -216,9 +216,13 @@ const utilityStyles = StyleSheet.create({
   w24: { width: 96 },
   w32: { width: 128 },
   w40: { width: 160 },
+  w42: {width: 165},
   w48: { width: 192 },
   w56: { width: 224 },
+  w58: {width: 225},
   w64: { width: 256 },
+  
+
   wFull: { width: '100%' },
   wAuto: { width: 'auto' },
 

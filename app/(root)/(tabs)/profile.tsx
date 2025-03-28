@@ -74,7 +74,7 @@ const profile = () => {
             </View>
             <TouchableOpacity onPress={() => Alert.alert("Profile Settings", "Coming Soon")}>
               <Image 
-                source={ user?.avatar ? { uri: user.avatar } : images.avatar} 
+                source={ user?.avatar ? { uri: user.avatar } : images.avatar } 
                 resizeMode='cover' 
                 style={{ 
                   width: 250, 

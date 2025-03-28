@@ -6,7 +6,7 @@ import images from '@/constants/images'
 import { fontFamily, utilityStyles } from '@/constants/utilityStyles'
 import Search from './Search'
 
-const Header = () => {
+const Header = ( {avatar, user} ) => {
   const [greeting, setGreeting] = useState('');
   const [toggle, setToggle] = useState(false);
 
@@ -38,10 +38,10 @@ const Header = () => {
     <View>
       <View style={ flexCenter }>
         <View style={ itemsCenter } >
-          <Image source={images.avatar} resizeMode='contain' style={ [utilityStyles.size_5, utilityStyles.roundedFull, utilityStyles.mr2]}/>
+          <Image source={ avatar } resizeMode='contain' style={ [utilityStyles.size_5, utilityStyles.roundedFull, utilityStyles.mr2]}/>
           <View>
             <Text style={ [utilityStyles.textGray500, utilityStyles.textSm, fontFamily.fontRubikRegular] }>Good {greeting}</Text>
-            <Text style={ fontFamily.fontRubikRegular }>Name Surename</Text>
+            <Text style={ fontFamily.fontRubikRegular }>{user}</Text>
           </View>
         </View>
         <View style={ flexCenter }>

@@ -15,7 +15,6 @@ const TabLayout = () => {
         borderTopColor: "#0061FF1A",
         borderTopWidth: 1,
         minHeight: 68,
-        boxShadow: "none"
       }
     }}>
     
@@ -37,6 +36,28 @@ const TabLayout = () => {
         headerShown: false,
         tabBarIcon: ({ focused }) => (
           <TabIcon focused={focused} icon={icons.search} title="Explore" />
+        )
+      }}
+    />
+    
+    <Tabs.Screen 
+      name="message"
+      options={{
+        title: "message",
+        headerShown: false,
+        tabBarIcon: ({ focused }) => (
+          <TabIcon focused={focused} icon={icons.message} title="Message" />
+        )
+      }}
+    />
+
+    <Tabs.Screen 
+      name="homes"
+      options={{
+        title: "homes",
+        headerShown: false,
+        tabBarIcon: ({ focused }) => (
+          <TabIcon focused={focused} icon={icons.apartment} title="Property" />
         )
       }}
     />

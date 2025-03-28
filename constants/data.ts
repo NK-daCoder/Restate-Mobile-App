@@ -34,6 +34,14 @@ export const cards = [
     category: "villa",
     image: images.japan,
   },
+  {
+    title: "Card 5",
+    location: "Location 4",
+    price: "$400",
+    rating: 5,
+    category: "villa",
+    image: images.japan,
+  },
 ];
 
 export const featuredCards = [

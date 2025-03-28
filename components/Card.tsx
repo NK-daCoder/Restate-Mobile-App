@@ -1,12 +1,25 @@
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
-import React from 'react'
+import { View, Text, TouchableOpacity, Alert, FlatList } from 'react-native'
+import { useState } from 'react'
 import { Image } from 'react-native'
 import { fontFamily, utilityStyles } from '@/constants/utilityStyles'
 import icons from '@/constants/icons'
+import { categories } from '@/constants/data'
+import { router, useLocalSearchParams } from 'expo-router'
 
-const FeaturedCard = ({ title, location, price, ratings, image }) => {
+
+interface CardProps {
+  title: string;
+  location: string;
+  price: string | number;
+  ratings?: number;
+  image: any; // ImagePropType or your specific type
+  onPress?: () => void;
+  category?: string;
+}
+
+const FeaturedCard = ({ title, location, price, ratings, image } : CardProps) => {
     return (
-      <View style={[utilityStyles.relative, utilityStyles.h64, utilityStyles.w64, utilityStyles.mb4, utilityStyles.mx2]}>
+      <View style={[utilityStyles.relative, utilityStyles.h64, utilityStyles.w58, utilityStyles.mb4, utilityStyles.mr2]}>
         {/* Main Card Content */}
         <TouchableOpacity 
           onPress={() => Alert.alert("Card Activated", `You tapped ${title}`)} 
@@ -63,8 +76,9 @@ const FeaturedCard = ({ title, location, price, ratings, image }) => {
               style={[
                 utilityStyles.textWhite, 
                 fontFamily.fontRubikSemiBold, 
-                utilityStyles.textLg,
-                utilityStyles.mb1
+                utilityStyles.textSm,
+                utilityStyles.mb1,
+                utilityStyles.uppercase
               ]}
               numberOfLines={1}
             >
@@ -75,13 +89,14 @@ const FeaturedCard = ({ title, location, price, ratings, image }) => {
               <Image 
                 source={icons.location} 
                 resizeMode='contain' 
-                style={[utilityStyles.size_4, utilityStyles.mr1]}
+                style={[utilityStyles.size_4, utilityStyles.mr1, utilityStyles.size_2]}
+                tintColor={utilityStyles.textWhite.color}
               />
               <Text 
                 style={[
                   utilityStyles.textWhite, 
                   fontFamily.fontRubikRegular, 
-                  utilityStyles.textSm,
+                  utilityStyles.textBase,
                   utilityStyles.flex1
                 ]}
                 numberOfLines={1}
@@ -93,7 +108,7 @@ const FeaturedCard = ({ title, location, price, ratings, image }) => {
             <Text style={[
               utilityStyles.textWhite, 
               fontFamily.fontRubikBold, 
-              utilityStyles.textXl
+              utilityStyles.text2xl
             ]}>
               {price}
             </Text>
@@ -122,24 +137,102 @@ const FeaturedCard = ({ title, location, price, ratings, image }) => {
 }
   
 
-const Card = () => {
+const Card = ({ onPress, image, title, location, price, ratings } : CardProps) => {
     return (
-        <View>
-            <Text>
-                Featured Card
-            </Text>
+        <View style={ [utilityStyles.wFull] }>
+            <TouchableOpacity onPress={ onPress } style={ [utilityStyles.relative, utilityStyles.w42, utilityStyles.px1, utilityStyles.my2,utilityStyles.rounded2xl] }>
+              <Image source={image} resizeMode='cover' style={ [utilityStyles.wFull, utilityStyles.h32, utilityStyles.rounded2xl] }/>
+              
+              <View style={[
+                utilityStyles.px2, 
+                utilityStyles.absolute, 
+                utilityStyles.top5, 
+                utilityStyles.right3, 
+                utilityStyles.flexRow, 
+                utilityStyles.border,
+                utilityStyles.roundedFull,
+                
+                { backgroundColor: 'rgba(255,255,255,0.5)' }
+              ]}>
+                <Image 
+                  source={icons.star} 
+                  resizeMode='contain' 
+                  style={ utilityStyles.size_2 }
+                />
+                <Text style={[fontFamily.fontRubikSemiBold, utilityStyles.textSm, utilityStyles.pt1, utilityStyles.px1]}>
+                  {ratings}
+                </Text>
+              </View>
+              <View style={[utilityStyles.flexCol]}>
+                <Text style={ [utilityStyles.textSm, fontFamily.fontRubikRegular, utilityStyles.uppercase, utilityStyles.mt2] }>{title}</Text>
+                <View style={ [utilityStyles.flexRow, utilityStyles.mb2 ] }>
+                  <Image source={icons.location} resizeMode='contain' style={[utilityStyles.size_2]} />
+                  <Text style={ [utilityStyles.textBase, fontFamily.fontRubikRegular] }>{location}</Text>
+                </View>
+                <View style={ [utilityStyles.flexRow, utilityStyles.alignItemCenter, utilityStyles.justifyBetween] }>
+                  <Text style={ [utilityStyles.textSky400, utilityStyles.text2xl, fontFamily.fontRubikSemiBold] }>{price}</Text>
+                  <TouchableOpacity onPress={() => Alert.alert("Favourite Activated", `${title}`)}>
+                    <Image source={icons.heart} resizeMode='contain' style={[utilityStyles.size_2]} tintColor={utilityStyles.textGray500.color}/>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableOpacity>
         </View>
     )
 }
 
-const Filter = () =>{
-    return (
-        <View>
-            <Text>
-                Filters
-            </Text>
-        </View>
-    )
-}
 
-export { Card, FeaturedCard, Filter }
+const CardFilter = () => {
+  const params = useLocalSearchParams<{ filter?: string }>();
+  const [selectedCategory, setSelectedCategory] = useState(
+    params.filter || "All"
+  );
+
+  const handleCategoryPress = (category: string) => {
+    if (selectedCategory === category) {
+      setSelectedCategory("");
+      router.setParams({ filter: "" });
+      return;
+    }
+
+    setSelectedCategory(category);
+    router.setParams({ filter: category });
+  };
+
+  return (
+    <FlatList
+      data={categories}
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{ marginTop: 0, marginBottom: 12 }}
+      keyExtractor={(item) => `filter-${item.category}`}
+      renderItem={({ item }) => (
+        <TouchableOpacity
+          onPress={() => handleCategoryPress(item.category)}
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginRight: 12,
+            paddingHorizontal: 30,
+            paddingVertical: 8,
+            borderRadius: 999,
+          
+            borderColor: '#e5e7eb',
+            backgroundColor: selectedCategory === item.category ? '#38bdf8' : 'white',
+          }}
+        >
+          <Text
+            style={{
+              color: selectedCategory === item.category ? 'white' : '#6b7280',
+            }}
+          >
+            {item.title}
+          </Text>
+        </TouchableOpacity>
+      )}
+    />
+  );
+};
+
+export { Card, FeaturedCard, CardFilter }
