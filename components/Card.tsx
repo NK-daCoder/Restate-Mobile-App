@@ -5,6 +5,7 @@ import { fontFamily, utilityStyles } from '@/constants/utilityStyles'
 import icons from '@/constants/icons'
 import { categories } from '@/constants/data'
 import { router, useLocalSearchParams } from 'expo-router'
+import { Models } from 'react-native-appwrite'
 
 
 interface CardProps {
@@ -15,20 +16,21 @@ interface CardProps {
   image: any; // ImagePropType or your specific type
   onPress?: () => void;
   category?: string;
+  item: Models.Document;
 }
 
-const FeaturedCard = ({ title, location, price, ratings, image } : CardProps) => {
+const FeaturedCard = ({ title, onPress, location, price, ratings, image, item } : CardProps) => {
     return (
-      <View style={[utilityStyles.relative, utilityStyles.h64, utilityStyles.w58, utilityStyles.mb4, utilityStyles.mr2]}>
+      <View style={[utilityStyles.relative, utilityStyles.h68, utilityStyles.w64, utilityStyles.mb4, utilityStyles.mr2]}>
         {/* Main Card Content */}
         <TouchableOpacity 
-          onPress={() => Alert.alert("Card Activated", `You tapped ${title}`)} 
+          onPress={ onPress } 
           style={[utilityStyles.hFull, utilityStyles.wFull, utilityStyles.relative, {overflow: 'hidden'}]}
           activeOpacity={0.8}
         >
           {/* Background Image with Overlay */}
           <Image 
-            source={image} 
+            source={{ uri: item.image }} 
             resizeMode="cover" 
             style={[utilityStyles.wFull, utilityStyles.hFull, utilityStyles.absolute, utilityStyles.rounded2xl]}
           />
@@ -39,12 +41,13 @@ const FeaturedCard = ({ title, location, price, ratings, image } : CardProps) =>
             utilityStyles.wFull, 
             utilityStyles.hFull,
             utilityStyles.rounded2xl,
-            { backgroundColor: 'rgba(0,0,0,0.2)' }
+            { backgroundColor: 'rgba(0,0,0,0.40)' }
           ]}/>
           
           {/* Rating Badge */}
           <View style={[
-            utilityStyles.px2, 
+            utilityStyles.px2,
+            utilityStyles.py1, 
             utilityStyles.absolute, 
             utilityStyles.top3, 
             utilityStyles.right3, 
@@ -52,7 +55,8 @@ const FeaturedCard = ({ title, location, price, ratings, image } : CardProps) =>
             utilityStyles.border,
             utilityStyles.roundedFull,
             utilityStyles.w16,
-            { backgroundColor: 'rgba(255,255,255,0.5)' }
+            { backgroundColor: 'rgba(255,255,255,0.5)' },
+            utilityStyles.justifyCenterXY
           ]}>
             <Image 
               source={icons.star} 
@@ -60,7 +64,7 @@ const FeaturedCard = ({ title, location, price, ratings, image } : CardProps) =>
               style={ utilityStyles.size_2 }
             />
             <Text style={[fontFamily.fontRubikSemiBold, utilityStyles.textSm, utilityStyles.pt1, utilityStyles.px1]}>
-              {ratings}
+              {item.rating}
             </Text>
           </View>
           
@@ -82,7 +86,7 @@ const FeaturedCard = ({ title, location, price, ratings, image } : CardProps) =>
               ]}
               numberOfLines={1}
             >
-              {title}
+              {item.name}
             </Text>
             
             <View style={[utilityStyles.flexRow, utilityStyles.alignItemCenter, utilityStyles.mb1]}>
@@ -97,11 +101,11 @@ const FeaturedCard = ({ title, location, price, ratings, image } : CardProps) =>
                   utilityStyles.textWhite, 
                   fontFamily.fontRubikRegular, 
                   utilityStyles.textBase,
-                  utilityStyles.flex1
+                  
                 ]}
                 numberOfLines={1}
               >
-                {location}
+                {item.address}
               </Text>
             </View>
             
@@ -110,7 +114,7 @@ const FeaturedCard = ({ title, location, price, ratings, image } : CardProps) =>
               fontFamily.fontRubikBold, 
               utilityStyles.text2xl
             ]}>
-              {price}
+              R {item.price}
             </Text>
           </View>
         </TouchableOpacity>
@@ -137,11 +141,11 @@ const FeaturedCard = ({ title, location, price, ratings, image } : CardProps) =>
 }
   
 
-const Card = ({ onPress, image, title, location, price, ratings } : CardProps) => {
+const Card = ({ onPress, image, title, location, price, ratings , item } : CardProps) => {
     return (
-        <View style={ [utilityStyles.wFull] }>
-            <TouchableOpacity onPress={ onPress } style={ [utilityStyles.relative, utilityStyles.w42, utilityStyles.px1, utilityStyles.my2,utilityStyles.rounded2xl] }>
-              <Image source={image} resizeMode='cover' style={ [utilityStyles.wFull, utilityStyles.h32, utilityStyles.rounded2xl] }/>
+        <View>
+            <TouchableOpacity onPress={ onPress } style={ [utilityStyles.relative, utilityStyles.wFull, utilityStyles.px1, utilityStyles.my2 ,utilityStyles.rounded2xl, utilityStyles.shadowSm, utilityStyles.px2, utilityStyles.py3] }>
+              <Image source={ {uri: item.image} } resizeMode='cover' style={ [utilityStyles.wFull, utilityStyles.h32, utilityStyles.roundedXl] }/>
               
               <View style={[
                 utilityStyles.px2, 
@@ -160,18 +164,18 @@ const Card = ({ onPress, image, title, location, price, ratings } : CardProps) =
                   style={ utilityStyles.size_2 }
                 />
                 <Text style={[fontFamily.fontRubikSemiBold, utilityStyles.textSm, utilityStyles.pt1, utilityStyles.px1]}>
-                  {ratings}
+                  {item.rating}
                 </Text>
               </View>
               <View style={[utilityStyles.flexCol]}>
-                <Text style={ [utilityStyles.textSm, fontFamily.fontRubikRegular, utilityStyles.uppercase, utilityStyles.mt2] }>{title}</Text>
-                <View style={ [utilityStyles.flexRow, utilityStyles.mb2 ] }>
+                <Text style={ [utilityStyles.textSm, fontFamily.fontRubikRegular, utilityStyles.uppercase, utilityStyles.mt2] }>{item.name}</Text>
+                <View style={ [utilityStyles.flexRow, utilityStyles.mb2, utilityStyles.alignItemCenter ] }>
                   <Image source={icons.location} resizeMode='contain' style={[utilityStyles.size_2]} />
-                  <Text style={ [utilityStyles.textBase, fontFamily.fontRubikRegular] }>{location}</Text>
+                  <Text style={ [{fontSize: 13}, fontFamily.fontRubikRegular, utilityStyles.w32] }>{item.address}</Text>
                 </View>
                 <View style={ [utilityStyles.flexRow, utilityStyles.alignItemCenter, utilityStyles.justifyBetween] }>
-                  <Text style={ [utilityStyles.textSky400, utilityStyles.text2xl, fontFamily.fontRubikSemiBold] }>{price}</Text>
-                  <TouchableOpacity onPress={() => Alert.alert("Favourite Activated", `${title}`)}>
+                  <Text style={ [utilityStyles.textSky400, utilityStyles.textBase, fontFamily.fontRubikSemiBold] }>R {item.price}</Text>
+                  <TouchableOpacity onPress={() => Alert.alert("Favourite Activated", `${item.name}`)}>
                     <Image source={icons.heart} resizeMode='contain' style={[utilityStyles.size_2]} tintColor={utilityStyles.textGray500.color}/>
                   </TouchableOpacity>
                 </View>
@@ -214,7 +218,7 @@ const CardFilter = () => {
             justifyContent: 'center',
             alignItems: 'center',
             marginRight: 12,
-            paddingHorizontal: 30,
+            paddingHorizontal: 15,
             paddingVertical: 8,
             borderRadius: 999,
           

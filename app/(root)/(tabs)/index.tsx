@@ -3,8 +3,13 @@ import Header from "@/components/Header";
 import { cards, featuredCards } from "@/constants/data";
 import images from "@/constants/images";
 import { fontFamily, utilityStyles } from "@/constants/utilityStyles";
+import { getLatestProperties, getProperties } from "@/lib/appwrite";
 import { useGlobalContext } from "@/lib/globalProvider";
-import { Alert, FlatList, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import seed from "@/lib/seed";
+import { useAppwrite } from "@/lib/useAppwrite";
+import { router, useLocalSearchParams } from "expo-router";
+import { useEffect } from "react";
+import { Alert, Button, FlatList, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 
 
 
@@ -13,8 +18,36 @@ export default function Index() {
 
   const { user } = useGlobalContext()
 
+  // extracting local search params such as queries and filters
+  const params = useLocalSearchParams<{ query?: string; filter?: string }>();
+  const { data: latestProperties, loading: latestPropertiesLoading } = useAppwrite({ fn: getLatestProperties });
+  const { data: properties, refetch, loading } = useAppwrite({
+    fn: getProperties,
+    params: {
+      filter: params.filter!,
+      query: params.query!,
+      // limit: <number of elements per page>
+      limit: 6,
+    },
+    // skip a specific amount of data needed
+    skip: true,
+  });
+
+  useEffect(() => {
+    refetch({
+      filter: params.filter!,
+      query: params.query!,
+      limit: 6,
+    });
+  }, [params.filter, params.query]);
+
+
+  const handleCardPress = (id: string) => router.push(`/properties/${id}`);
+
   return (
     <SafeAreaView style={[utilityStyles.hFull, utilityStyles.px1, utilityStyles.bgWhite]}>
+      { /* <Button title="Seed" onPress={seed} />*/}
+      
       <FlatList 
         contentContainerStyle={{
           paddingHorizontal: 12,
@@ -34,17 +67,15 @@ export default function Index() {
 
               <FlatList 
                   horizontal
-                  data={featuredCards}
+                  data={latestProperties}
                   renderItem={({item}) => (
                     <FeaturedCard 
-                      title={item.title} 
-                      location={item.location} 
-                      price={item.price} 
-                      ratings={item.rating} 
-                      image={item.image}
+                      
+                      item={item}
+                      onPress={() => handleCardPress(item.$id)}
                     />
                   )}
-                  keyExtractor={item => item.id}
+                  keyExtractor={(item) => item.$id}
               />
               <View style={ [utilityStyles.flexRow, utilityStyles.justifyBetween] }>
                 <Text style={ fontFamily.fontRubikSemiBold }>Recommended</Text>
@@ -57,16 +88,14 @@ export default function Index() {
           )
         }
 
-        data={cards}
+        data={properties}
         numColumns={2}
-        columnWrapperStyle={{
-          justifyContent: 'space-between', // or 'space-around'
-          gap: 2, // Add this if you're using React Native 0.71+
-        }}
+        columnWrapperStyle={ utilityStyles.gap3 }
         renderItem={({ item }) => (
-          <View>
-            <Card onPress={() => Alert.alert(`${item.title} Button Activated`)} image={item.image} title={item.title} location={item.location} price={item.price} ratings={item.rating}/>
-          </View>
+            <Card 
+              item={item} 
+              onPress={() => handleCardPress(item.$id)}  
+            /> 
         )}
         keyExtractor={(item, _index) => `card-${_index}`}
         showsVerticalScrollIndicator={false}

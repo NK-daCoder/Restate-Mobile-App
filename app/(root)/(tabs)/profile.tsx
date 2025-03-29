@@ -120,6 +120,7 @@ const profile = () => {
                 borderTopColor: '#e5e7eb',
                 paddingTop: 16
               } : null}
+              showArrow={ isLogout ? false : true }
             />
           )
         }}

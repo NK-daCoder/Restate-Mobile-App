@@ -245,6 +245,7 @@ const utilityStyles = StyleSheet.create({
   h48: { height: 192 },
   h56: { height: 224 },
   h64: { height: 256 },
+  h68: { height: 275 },
   hFull: { height: '100%' },
   hAuto: { height: 'auto' },
 
@@ -441,11 +442,12 @@ const utilityStyles = StyleSheet.create({
 
   // Shadow Utilities
   shadowSm: {
-    shadowColor: '#000',
+    shadowColor: 'Black',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    backgroundColor: "white"
   },
   shadowMd: {
     shadowColor: '#000',
@@ -453,6 +455,7 @@ const utilityStyles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 6,
     elevation: 4,
+    backgroundColor: "white"
   },
   shadowLg: {
     shadowColor: '#000',
@@ -460,6 +463,7 @@ const utilityStyles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 6,
+    backgroundColor: "white"
   },
 
   // Opacity Utilities
